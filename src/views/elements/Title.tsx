@@ -5,9 +5,10 @@ import Icon from 'src/@core/components/icon'
 type TitleProps = {
   heading: string
   paragraph?: string
+  openModal?: Function
 }
 
-const Title = ({ heading, paragraph }: TitleProps) => {
+const Title = ({ heading, paragraph, openModal }: TitleProps) => {
   return (
     <Box
       sx={{
@@ -41,7 +42,11 @@ const Title = ({ heading, paragraph }: TitleProps) => {
             borderRadius: '100%',
             padding: '0px'
           }}
-          onClick={() => alert('Soon')}
+          onClick={() => {
+            if(openModal){
+              openModal()
+            } 
+          }}
         >
           <Icon icon='tabler:plus' fontSize={'1rem'} />
         </Button>
