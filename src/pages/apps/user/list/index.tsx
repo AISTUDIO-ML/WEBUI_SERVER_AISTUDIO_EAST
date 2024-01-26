@@ -112,6 +112,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
   }
 
   const handleDelete = () => {
+  
     dispatch(deleteUser(id))
     handleRowOptionsClose()
   }
@@ -139,7 +140,7 @@ const RowOptions = ({ id }: { id: number | string }) => {
         <MenuItem
           component={Link}
           sx={{ '& svg': { mr: 2 } }}
-          href='/apps/user/view/account'
+          href={`/apps/user/view/account/${id}`}
           onClick={handleRowOptionsClose}
         >
           <Icon icon='tabler:eye' fontSize={20} />
@@ -310,6 +311,15 @@ const UserList = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) =
 
   const toggleAddUserDrawer = () => setAddUserOpen(!addUserOpen)
 
+  const filterData = (users: any) => {
+    return users.map((user: any) => {
+      return {
+        ...user,
+        id: user._id
+      }
+    })
+  }
+
   return (
     <Grid container spacing={6.5}>
       <Grid item xs={12}>
@@ -391,7 +401,7 @@ const UserList = ({ apiData }: InferGetStaticPropsType<typeof getStaticProps>) =
           <DataGrid
             autoHeight
             rowHeight={62}
-            rows={store.data}
+            rows={filterData(store.data)}
             columns={columns}
             disableRowSelectionOnClick
             pageSizeOptions={[10, 25, 50]}

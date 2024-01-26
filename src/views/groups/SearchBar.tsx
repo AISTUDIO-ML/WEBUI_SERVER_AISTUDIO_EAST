@@ -9,7 +9,8 @@ import Icon from 'src/@core/components/icon'
 import { FormControl, InputAdornment, OutlinedInput } from '@mui/material'
 import React from 'react'
 
-const SearchBar = () => {
+const SearchBar = (props: any) => {
+
   return (
     <Grid item xs={12} spacing={4}>
       <Card>
@@ -23,6 +24,7 @@ const SearchBar = () => {
           <OutlinedInput
             size='small'
             placeholder='Search...'
+            onChange={(e) => props.setQuery(e.target.value)}
             startAdornment={
               <InputAdornment position='start'>
                 <Icon icon='tabler:search' />

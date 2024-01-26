@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -88,7 +88,7 @@ const Sub = styled('sub')(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize
 }))
 
-const UserViewLeft = () => {
+const UserViewLeft = (props:any) => {
   // ** States
   const [openEdit, setOpenEdit] = useState<boolean>(false)
   const [openPlans, setOpenPlans] = useState<boolean>(false)
@@ -102,38 +102,38 @@ const UserViewLeft = () => {
   // Handle Upgrade Plan dialog
   const handlePlansClickOpen = () => setOpenPlans(true)
   const handlePlansClose = () => setOpenPlans(false)
-
+  
   if (data) {
     return (
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <Card>
             <CardContent sx={{ pt: 13.5, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-              {data.avatar ? (
+              {props.user.avatar ? (
                 <CustomAvatar
-                  src={data.avatar}
+                  src={props.user.avatar}
                   variant='rounded'
-                  alt={data.fullName}
+                  alt={props.user.fullName}
                   sx={{ width: 100, height: 100, mb: 4 }}
                 />
               ) : (
                 <CustomAvatar
                   skin='light'
                   variant='rounded'
-                  color={data.avatarColor as ThemeColor}
+                  color={props.user.avatarColor as ThemeColor}
                   sx={{ width: 100, height: 100, mb: 4, fontSize: '3rem' }}
                 >
                   {getInitials(data.fullName)}
                 </CustomAvatar>
               )}
               <Typography variant='h4' sx={{ mb: 3 }}>
-                {data.fullName}
+                {props.user.fullName}
               </Typography>
               <CustomChip
                 rounded
                 skin='light'
                 size='small'
-                label={data.role}
+                label={props.user.role}
                 color={roleColors[data.role]}
                 sx={{ textTransform: 'capitalize' }}
               />
@@ -171,11 +171,11 @@ const UserViewLeft = () => {
               <Box sx={{ pt: 4 }}>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Username:</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>@{data.username}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>@{props.user.username}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Email:</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>{data.email}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{props.user.email}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3, alignItems: 'center' }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Status:</Typography>
@@ -183,8 +183,8 @@ const UserViewLeft = () => {
                     rounded
                     skin='light'
                     size='small'
-                    label={data.status}
-                    color={statusColors[data.status]}
+                    label={props.user.status}
+                    color={statusColors[props.user.status]}
                     sx={{
                       textTransform: 'capitalize'
                     }}
@@ -192,15 +192,15 @@ const UserViewLeft = () => {
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Role:</Typography>
-                  <Typography sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>{data.role}</Typography>
+                  <Typography sx={{ color: 'text.secondary', textTransform: 'capitalize' }}>{props.user.role}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Tax ID:</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>Tax-8894</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{props.user.tax_id}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Contact:</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>+1 {data.contact}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>+1 {props.user.contact}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', mb: 3 }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Language:</Typography>
@@ -208,7 +208,7 @@ const UserViewLeft = () => {
                 </Box>
                 <Box sx={{ display: 'flex' }}>
                   <Typography sx={{ mr: 2, fontWeight: 500, color: 'text.secondary' }}>Country:</Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>{data.country}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{props.user.country}</Typography>
                 </Box>
               </Box>
             </CardContent>

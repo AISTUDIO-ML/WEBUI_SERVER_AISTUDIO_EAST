@@ -9,7 +9,7 @@ interface DataParams {
   q: string
   role: string
   status: string
-  currentPlan: string
+  currentPlan: string,
 }
 
 interface Redux {
@@ -19,7 +19,7 @@ interface Redux {
 
 // ** Fetch Users
 export const fetchData = createAsyncThunk('appUsers/fetchData', async (params: DataParams) => {
-  const response = await axios.get('/apps/users/list', {
+  const response = await axios.post('/api/users/list', {
     params
   })
 
@@ -29,12 +29,27 @@ export const fetchData = createAsyncThunk('appUsers/fetchData', async (params: D
 // ** Add User
 export const addUser = createAsyncThunk(
   'appUsers/addUser',
-  async (data: { [key: string]: number | string }, { getState, dispatch }: Redux) => {
-    const response = await axios.post('/apps/users/add-user', {
-      data
+  async (data: { [key: string]: number | string | string[] | boolean }, { getState, dispatch }: Redux) => {
+    const response = await axios.post('/api/users/add-user', {
+      ...data
     })
+  
     dispatch(fetchData(getState().user.params))
+  
+    return response.data
+  }
+)
 
+// ** Edit User
+export const editUser = createAsyncThunk(
+  'appUsers/editUser',
+  async (data: { [key: string]: number | string | string[] | boolean }, { getState, dispatch }: Redux) => {
+    const response = await axios.post('/api/users/edit-user', {
+      ...data
+    })
+  
+    dispatch(fetchData(getState().user.params))
+  
     return response.data
   }
 )
@@ -43,9 +58,7 @@ export const addUser = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   'appUsers/deleteUser',
   async (id: number | string, { getState, dispatch }: Redux) => {
-    const response = await axios.delete('/apps/users/delete', {
-      data: id
-    })
+    const response = await axios.delete(`/api/users/delete/${id}`)
     dispatch(fetchData(getState().user.params))
 
     return response.data
@@ -58,7 +71,10 @@ export const appUsersSlice = createSlice({
     data: [],
     total: 1,
     params: {},
-    allData: []
+    allData: [],
+    error: 0,
+    message: ""
+  
   },
   reducers: {},
   extraReducers: builder => {
@@ -68,7 +84,17 @@ export const appUsersSlice = createSlice({
       state.params = action.payload.params
       state.allData = action.payload.allData
     })
+    builder.addCase(addUser.fulfilled, (state, action) => {
+      if(!action.payload.status){
+        state.error = 2;
+        state.message = action.payload.message
+      } else {
+        state.error = 1;
+        state.message = ""
+      }
+    })
   }
 })
+
 
 export default appUsersSlice.reducer

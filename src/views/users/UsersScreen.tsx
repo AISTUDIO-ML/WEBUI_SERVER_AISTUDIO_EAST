@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -27,6 +28,7 @@ import { Tab, Tabs, Button } from '@mui/material'
 import React from 'react'
 import { rows } from 'src/@fake-db/table/static-data'
 import CustomChip from 'src/@core/components/mui/chip'
+import { fetchData } from 'src/store/apps/user'
 
 interface StatusObj {
   [key: number]: {
@@ -63,6 +65,24 @@ const statusObj: StatusObj = {
   3: { title: 'rejected', color: 'error' },
   4: { title: 'resigned', color: 'warning' },
   5: { title: 'applied', color: 'info' }
+}
+
+const mapUsersData = (users: []) => {
+  return users.map((user: any) => {
+    return {
+      id: user._id,
+      avatar: "8.png",
+      full_name: user.username,
+      post: "Nuclear Power Engineer",
+      email: user.billing_email,
+      city: user.country,
+      start_date: user.start_date,
+      salary: 12312312,
+      age: '63',
+      experience: '1 Year',
+      status: user.status
+    }
+  })
 }
 
 const columns: GridColDef[] = [
@@ -102,8 +122,8 @@ const columns: GridColDef[] = [
           rounded
           size='small'
           skin='light'
-          color={status.color}
-          label={status.title}
+          // color={status.color}
+          // label={status.title}
           sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
         />
       )
@@ -170,9 +190,12 @@ const columns: GridColDef[] = [
   }
 ]
 
-const UsersScreen = () => {
+const UsersScreen = (props: any) => {
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
-
+  const users = useSelector((state: any) => {
+    console.log(state)
+    return state.user.data})
+  
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -216,7 +239,7 @@ const UsersScreen = () => {
           <Card>
             <DataGrid
               autoHeight
-              rows={rows}
+              rows={mapUsersData(users)}
               columns={columns}
               checkboxSelection
               pageSizeOptions={[7, 10, 25, 50]}

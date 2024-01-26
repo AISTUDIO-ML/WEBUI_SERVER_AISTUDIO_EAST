@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Ref, useState, forwardRef, ReactElement } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { useImmer } from 'use-immer'
@@ -28,6 +29,7 @@ import CustomTextField from 'src/@core/components/mui/text-field'
 import { info } from 'console'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { addUser, fetchData } from "src/store/apps/user/index"
 // import BreadcrumbsComponent from 'src/views/groups/BreadcrumbsComponent'
 
 const TabPanel = styled(MUITabPanel)(({}) => ({
@@ -70,13 +72,17 @@ const UserList = () => {
   const [username, setUserName] = useState<string>("")
   const [billing_email, setBillingEmail] = useState<string>("")
   const [status, setStatus] = useState<string>("")
-  const [tax_id, setTaxId] = useState<string>();
+  const [tax_id, setTaxId] = useState<string>("");
   const [phone_number, setPhone] = useState<string>("")
   const [country, setCountry] = useState<string>("")
   const [shipping_address, setShippingAddress] = useState<boolean>(false)
+  const [q, setQuery] = useState<string>("")
   const [state, setState] = useImmer({
     page: 'USERS'
   })
+  const error = useSelector( (state:any) => state.user.error)
+  const message = useSelector( (state:any) => state.user.message)
+  const dispatch = useDispatch()
 
   const handleCloseAlert = () => {
     setShowAlert(false)
@@ -90,38 +96,61 @@ const UserList = () => {
 
   const submitUserInfo = (event:any) => {
     event.preventDefault()
-    fetch("/api/users", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        first_name: firstname,
-        last_name: lastname,
-        username: username,
-        billing_email: billing_email,
-        status: status,
-        tax_id: tax_id,
-        contact: phone_number,
-        languages: languages,
-        country: country,
-        shipping_address: shipping_address
-      })
-    }).then( async response => {
-      const res_data = await response.json()
-      setNotification({
-        type: "success",
-        message: "User is created successfully."
-      })
-      setShowAlert(true)
-      setShow(false)
-    }).catch(error => {
-      setNotification({
-        type: "error",
-        message: "User creating is failed. "
-      })
-      setShowAlert(true)
-    })
+    const params = {
+      first_name: firstname,
+      last_name: lastname,
+      username: username,
+      billing_email: billing_email,
+      status: status,
+      tax_id: tax_id,
+      contact: phone_number,
+      languages: languages,
+      country: country,
+      role: "asdasd",
+      shipping_address: shipping_address
+    }
+    dispatch(addUser(params))
+    // fetch("/api/users", {
+    //   method: "POST",
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     first_name: firstname,
+    //     last_name: lastname,
+    //     username: username,
+    //     billing_email: billing_email,
+    //     status: status,
+    //     tax_id: tax_id,
+    //     contact: phone_number,
+    //     languages: languages,
+    //     country: country,
+    //     shipping_address: shipping_address
+    //   })
+    // }).then( async response => {
+    //   const res_data = await response.json()
+    //   if(response.status === 200) {
+    //     setNotification({
+    //       type: "success",
+    //       message: "User is created successfully."
+    //     })
+    //     setShowAlert(true)
+    //     setShow(false)
+    //   } else {
+    //     setNotification({
+    //       type: "error",
+    //       message: res_data.message
+    //     })
+    //     setShowAlert(true)  
+    //   }
+      
+    // }).catch(error => {
+    //   setNotification({
+    //     type: "error",
+    //     message: "User creating is failed. "
+    //   })
+    //   setShowAlert(true)
+    // })
   }
   const onChangeState = React.useCallback(
     (key: keyof typeof state, value: string) => {
@@ -134,7 +163,32 @@ const UserList = () => {
   const onCreateButton = () => {
     setShow(true)
   }
-
+  useEffect(()=>{
+    if(error === 1){
+      setNotification({
+              type: "success",
+              message: "User is created successfully."
+            })
+      setShowAlert(true)
+      setShow(false)
+    } else if(error === 2){
+      setNotification({
+              type: "error",
+              message: message
+            })
+      setShowAlert(true) 
+    }
+  },[error])
+  useEffect(()=>{
+    alert(q)
+    const params = {
+      q: q,
+      role: "",
+      status: "",
+      currentPlan: "",
+    }
+    dispatch(fetchData(params))
+  }, [q])
   // USERS
   // CUSTOM ACCOUNT ROLES
 
@@ -157,8 +211,8 @@ const UserList = () => {
             </Box>
             <TabPanel value={'USERS'}>
               <Title heading='Users' openModal= {onCreateButton}/>
-              <SearchBar />
-              <UsersScreen />
+              <SearchBar setQuery = {setQuery}/>
+              <UsersScreen query = {q}/>
             </TabPanel>
             <TabPanel value={'CUSTOM ACCOUNT ROLES'}>
               <Title
