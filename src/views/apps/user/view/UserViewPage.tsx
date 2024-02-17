@@ -12,7 +12,7 @@ import UserViewRight from 'src/views/apps/user/view/UserViewRight'
 
 type Props = {
   tab: string,
-  user_id: string,
+  user_id?: string,
   invoiceData: InvoiceType[]
 }
 
