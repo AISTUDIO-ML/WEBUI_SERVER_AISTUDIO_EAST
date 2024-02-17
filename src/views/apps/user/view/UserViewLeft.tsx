@@ -1,5 +1,5 @@
 // ** React Imports
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -88,7 +88,7 @@ const Sub = styled('sub')(({ theme }) => ({
   fontSize: theme.typography.body1.fontSize
 }))
 
-const UserViewLeft = (props:any) => {
+const UserViewLeft = (props: any) => {
   // ** States
   const [openEdit, setOpenEdit] = useState<boolean>(false)
   const [openPlans, setOpenPlans] = useState<boolean>(false)
@@ -102,7 +102,7 @@ const UserViewLeft = (props:any) => {
   // Handle Upgrade Plan dialog
   const handlePlansClickOpen = () => setOpenPlans(true)
   const handlePlansClose = () => setOpenPlans(false)
-  
+
   if (data) {
     return (
       <Grid container spacing={6}>

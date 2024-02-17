@@ -28,7 +28,7 @@ import UserViewNotification from 'src/views/apps/user/view/UserViewNotification'
 import { InvoiceType } from 'src/types/apps/invoiceTypes'
 
 interface Props {
-  tab: string
+  tab: any
   invoiceData: InvoiceType[]
 }
 

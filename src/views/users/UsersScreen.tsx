@@ -71,9 +71,9 @@ const mapUsersData = (users: []) => {
   return users.map((user: any) => {
     return {
       id: user._id,
-      avatar: "8.png",
+      avatar: '8.png',
       full_name: user.username,
-      post: "Nuclear Power Engineer",
+      post: 'Nuclear Power Engineer',
       email: user.billing_email,
       city: user.country,
       start_date: user.start_date,
@@ -122,6 +122,7 @@ const columns: GridColDef[] = [
           rounded
           size='small'
           skin='light'
+
           // color={status.color}
           // label={status.title}
           sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
@@ -194,8 +195,10 @@ const UsersScreen = (props: any) => {
   const [paginationModel, setPaginationModel] = useState({ page: 0, pageSize: 10 })
   const users = useSelector((state: any) => {
     console.log(state)
-    return state.user.data})
-  
+
+    return state.user.data
+  })
+
   return (
     <React.Fragment>
       <Grid item xs={12}>

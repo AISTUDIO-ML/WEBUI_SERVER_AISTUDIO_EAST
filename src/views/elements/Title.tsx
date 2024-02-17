@@ -5,7 +5,7 @@ import Icon from 'src/@core/components/icon'
 type TitleProps = {
   heading: string
   paragraph?: string
-  openModal?: Function
+  openModal?: () => void
 }
 
 const Title = ({ heading, paragraph, openModal }: TitleProps) => {
@@ -43,9 +43,9 @@ const Title = ({ heading, paragraph, openModal }: TitleProps) => {
             padding: '0px'
           }}
           onClick={() => {
-            if(openModal){
+            if (openModal) {
               openModal()
-            } 
+            }
           }}
         >
           <Icon icon='tabler:plus' fontSize={'1rem'} />
